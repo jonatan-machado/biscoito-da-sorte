@@ -1,49 +1,87 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from "react";
+import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
-export default class App extends Component<Props> {
+class Botao extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.styles = StyleSheet.create({
+      botao: {
+        width: 250,
+        height: 50,
+        borderWidth: 2,
+        borderColor: props.color,
+        backgroundColor: "transparent",
+        borderRadius: 25
+      },
+      botaoArea: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+      },
+      botaoText: {
+        color: props.color,
+        fontSize: 14,
+        fontWeight: "bold"
+      }
+    });
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+      <TouchableOpacity style={this.styles.botao} onPress={this.props.onPress}>
+        <View style={this.styles.botaoArea}>
+          <Text style={this.styles.botaoText}>{this.props.text}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { texto: "Algum texto...." };
+    this.frases = [
+      "As pessoas costumam dizer que a motivação não dura sempre. Bem, nem o efeito do banho, por isso recomenda-se diariamente",
+      "Toda ação humana, quer se torne positiva ou negativa, precisa depender de motivação.",
+      "A verdadeira motivação vem de realização, desenvolvimento pessoal, satisfação no trabalho e reconhecimento."
+    ];
+    this.quebrarBiscoito = this.quebrarBiscoito.bind(this);
+  }
+  quebrarBiscoito() {
+    let s = this.state;
+    let r = Math.floor(Math.random() * this.frases.length);
+    s.texto = this.frases[r];
+    this.setState(s);
+  }
+  render() {
+    return (
+      <View style={styles.body}>
+        <Image source={require("./image/cookie.png")} />
+        <Text style={styles.texto}>"{this.state.texto}"</Text>
+        <Botao
+          color="#B59619"
+          text="Quebrar biscoito"
+          onPress={this.quebrarBiscoito}
+        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  body: {
+    paddingTop: 20,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: "center",
+    alignItems: "center"
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  texto: {
+    fontSize: 17,
+    color: "#b59619",
+    margin: 30,
+    fontStyle: "italic",
+    textAlign: "center"
+  }
 });
